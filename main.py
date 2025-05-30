@@ -14,7 +14,7 @@ from datetime import datetime
 # 1. Configuration
 # ======================
 # Create output directories
-os.makedirs('plots', exist_ok=True)
+os.makedirs('images', exist_ok=True)
 os.makedirs('data', exist_ok=True)
 
 # Set global styles
@@ -81,7 +81,7 @@ print(f"Total Records: {len(df):,}")
 def save_fig(plt, name):
     """Save plot to file with standardized formatting"""
     plt.tight_layout()
-    plt.savefig(f'plots/{name}.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'docs/images/{name}.png', dpi=300, bbox_inches='tight')
     plt.close()
 
 # ======================
@@ -285,4 +285,4 @@ if __name__ == "__main__":
     corr_matrix = correlation_analysis(df)
     normalized_prices = comparative_analysis(df)
 
-    print("\nAnalysis complete! All plots saved in 'plots/' directory.")
+    print("\nAnalysis complete! All plots saved in 'images/' directory.")
