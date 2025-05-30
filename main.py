@@ -275,6 +275,22 @@ def comparative_analysis(df):
     save_fig(plt, 'cumulative_returns')
 
     return pivot_df_normalized
+    def generate_processed_data(df):
+    """Create processed data CSV with key metrics"""
+    processed_df = df.copy()
+    
+    # Calculate additional metrics
+    processed_df['Daily_Return'] = processed_df.groupby('Ticker')['Close'].pct_change()
+    processed_df['Cumulative_Return'] = processed_df.groupby('Ticker')['Daily_Return'].cumsum()
+    
+    # Select key columns
+    keep_columns = ['Date', 'Ticker', 'Open', 'High', 'Low', 'Close', 'Volume', 
+                   'Daily_Return', 'Cumulative_Return']
+    return processed_df[keep_columns]
+
+# Add this before your main execution
+processed_data = generate_processed_data(df)
+processed_data.to_csv('docs/processed_stock_data.csv', index=False)
 
 # ======================
 # 8. Main Execution
