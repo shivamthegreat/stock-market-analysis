@@ -1,240 +1,961 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Stock Market Analysis</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <title>📊 Professional Stock Market Analysis</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js for interactive charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- AOS for scroll animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <!-- Lightbox for image viewing -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+
   <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #10b981;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --gray: #64748b;
+      --border-radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
     body {
       font-family: 'Inter', sans-serif;
-      margin: 0;
-      background-color: #f5f7fa;
-      color: #1e1e2f;
-      transition: background 0.3s, color 0.3s;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-
-    .dark-mode {
-      background-color: #1e1e2f;
-      color: #f5f7fa;
+    
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
     }
-
+    
+    /* Header with animated gradient */
     header {
-      background: linear-gradient(135deg, #2a2f4f, #6c5ce7);
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4776E6 100%);
       color: white;
-      padding: 2rem;
+      padding: 80px 20px 60px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-
-    header img {
-      height: 50px;
-      vertical-align: middle;
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.2;
     }
-
-    .container {
-      max-width: 1100px;
-      margin: 2rem auto;
-      padding: 0 1rem;
+    
+    .header-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
     }
-
-    .tabs {
+    
+    header h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    header p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 30px;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+    
+    .hero-image {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-lg);
+      margin-top: 30px;
+      transition: var(--transition);
+    }
+    
+    .hero-image:hover {
+      transform: translateY(-5px);
+    }
+    
+    /* Navigation */
+    .nav-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 15px 20px;
       display: flex;
-      justify-content: center;
-      margin-bottom: 2rem;
-      gap: 20px;
+      justify-content: space-between;
+      align-items: center;
     }
-
-    .tab {
-      padding: 0.75rem 1.5rem;
-      border-radius: 25px;
-      border: 2px solid #6c5ce7;
-      background-color: transparent;
-      color: #6c5ce7;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .tab:hover, .tab.active {
-      background-color: #6c5ce7;
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
       color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
     }
-
-    .tab-content {
-      display: none;
-      animation: fadeIn 0.5s ease-in-out;
+    
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.8rem;
     }
-
-    .tab-content.active {
-      display: block;
+    
+    .nav-links {
+      display: flex;
+      gap: 25px;
     }
-
+    
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: var(--transition);
+      position: relative;
+    }
+    
+    .nav-links a:hover {
+      color: #60a5fa;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #60a5fa;
+      transition: var(--transition);
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    /* Main container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+    
+    /* Section styling */
+    section {
+      margin-bottom: 80px;
+    }
+    
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 30px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+    
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin: 30px 0 15px;
+    }
+    
+    /* Grid layout */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
+      gap: 30px;
     }
-
-    figure {
-      margin: 0;
-      border: 1px solid #ccc;
-      border-radius: 12px;
+    
+    /* Card styling */
+    .card {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
       overflow: hidden;
-      background-color: white;
-      transition: transform 0.3s;
+      position: relative;
     }
-
-    .dark-mode figure {
-      background-color: #2a2a3a;
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
     }
-
-    figure:hover {
+    
+    .card-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      transition: var(--transition);
+    }
+    
+    .card:hover .card-image {
       transform: scale(1.02);
     }
-
-    figcaption {
-      padding: 0.75rem;
-      text-align: center;
+    
+    .card-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+    
+    .card-description {
+      color: var(--gray);
+      font-size: 0.95rem;
+      margin-bottom: 15px;
+    }
+    
+    .card-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--primary);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
       font-weight: 600;
     }
-
-    img.chart {
+    
+    /* Interactive chart container */
+    .chart-container {
+      position: relative;
+      height: 300px;
       width: 100%;
-      height: auto;
-      cursor: pointer;
+      margin: 20px 0;
     }
-
-    .download-link {
-      text-align: center;
-      margin-top: 2rem;
-    }
-
-    .download-link a {
-      padding: 1rem 2rem;
-      border-radius: 10px;
-      background-color: #6c5ce7;
-      color: white;
-      font-weight: bold;
+    
+    /* Button styling */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
       text-decoration: none;
-    }
-
-    .toggle-dark {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 0.5rem 1rem;
-      background: #6c5ce7;
-      color: white;
+      transition: var(--transition);
+      cursor: pointer;
       border: none;
-      border-radius: 20px;
-      font-weight: bold;
-      cursor: pointer;
+      font-size: 1rem;
     }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 99;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background: rgba(0, 0, 0, 0.85);
+    
+    .btn i {
+      margin-right: 8px;
     }
-
-    .modal-content {
-      margin: 5% auto;
-      display: block;
-      max-width: 90%;
-      border-radius: 10px;
-    }
-
-    .close {
-      position: absolute;
-      top: 30px;
-      right: 40px;
+    
+    .btn-primary {
+      background: var(--primary);
       color: white;
-      font-size: 40px;
-      font-weight: bold;
-      cursor: pointer;
     }
-
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+    
+    .btn-secondary {
+      background: var(--secondary);
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #0d9b6c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+    }
+    
+    /* Download section */
+    .download-section {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-radius: var(--border-radius);
+      margin: 60px 0;
+    }
+    
+    .download-section h2 {
+      margin-bottom: 20px;
+    }
+    
+    .download-section p {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      color: var(--gray);
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    /* Tabs for different chart types */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 30px;
+    }
+    
+    .tab {
+      padding: 12px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--gray);
+      border-bottom: 3px solid transparent;
+      transition: var(--transition);
+    }
+    
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    
+    .tab:hover:not(.active) {
+      color: var(--dark);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    
+    /* Tooltip for chart hover effects */
+    .tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 60px 20px 30px;
+      text-align: center;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      text-align: left;
+    }
+    
+    .footer-column h3 {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .footer-links a:hover {
+      color: white;
+      padding-left: 5px;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-links a {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .social-links a:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      
+      .nav-links {
+        display: none; /* Consider adding a mobile menu */
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
+    }
+    
+    /* Animation classes */
+    .fade-in {
+      animation: fadeIn 1s ease;
+    }
+    
+    .slide-up {
+      animation: slideUp 0.8s ease;
+    }
+    
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Custom chart styling */
+    .chart-card {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+    }
+    
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .chart-title {
+      font-weight: 600;
+      color: var(--dark);
+    }
+    
+    .chart-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .chart-btn {
+      background: #f1f5f9;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: var(--transition);
+    }
+    
+    .chart-btn:hover {
+      background: #e2e8f0;
+    }
+    
+    .chart-btn.active {
+      background: var(--primary);
+      color: white;
+    }
   </style>
 </head>
 <body>
-  <button class="toggle-dark" onclick="toggleDarkMode()">🌙 Dark Mode / ☀️ Light Mode</button>
+  <!-- Navigation -->
+  <div class="nav-container">
+    <nav>
+      <a href="#" class="logo">
+        <i class="fas fa-chart-line"></i>
+        StockVision
+      </a>
+      <div class="nav-links">
+        <a href="#metrics">Metrics</a>
+        <a href="#technical">Technical</a>
+        <a href="#rsi">RSI</a>
+        <a href="#download">Download</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </div>
 
+  <!-- Hero Section -->
   <header>
-    <h1>📈 Stock Market Analysis Report</h1>
-    <p>Visualized Insights & Downloadable Data</p>
+    <div class="header-content">
+      <h1>Professional Stock Market Analysis</h1>
+      <p>Advanced visualizations and technical indicators to help you make informed investment decisions</p>
+      <img src="https://media.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif" alt="Stock Market Analysis" class="hero-image">
+    </div>
   </header>
 
   <div class="container">
-    <div class="tabs">
-      <div class="tab active" onclick="showTab('charts')">📊 Visualizations</div>
-      <div class="tab" onclick="showTab('download')">⬇️ Download Data</div>
-    </div>
-
-    <div id="charts" class="tab-content active">
+    <!-- Key Metrics Section -->
+    <section id="metrics" data-aos="fade-up">
+      <h2>📈 Key Metrics & Visualizations</h2>
+      <p class="section-description">Explore comprehensive market metrics and trends with our interactive charts.</p>
+      
+      <div class="tabs">
+        <div class="tab active" onclick="openTab(event, 'trends')">Price Trends</div>
+        <div class="tab" onclick="openTab(event, 'correlation')">Correlation</div>
+        <div class="tab" onclick="openTab(event, 'volume')">Volume</div>
+      </div>
+      
+      <div id="trends" class="tab-content active">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">AAPL Price Trends (1 Year)</h3>
+            <div class="chart-actions">
+              <button class="chart-btn active" onclick="changeTimeframe('1y')">1Y</button>
+              <button class="chart-btn" onclick="changeTimeframe('6m')">6M</button>
+              <button class="chart-btn" onclick="changeTimeframe('1m')">1M</button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="priceChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div id="correlation" class="tab-content">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">Sector Correlation Matrix</h3>
+          </div>
+          <div class="chart-container">
+            <canvas id="correlationChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div id="volume" class="tab-content">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">Trading Volume Analysis</h3>
+          </div>
+          <div class="chart-container">
+            <canvas id="volumeChart"></canvas>
+          </div>
+        </div>
+      </div>
+      
       <div class="grid">
-        <figure>
-          <img src="docs/images/price_trends.png" alt="Price Trends" class="chart" onclick="openModal(this.src)">
-          <figcaption>Price Trends</figcaption>
-        </figure>
-        <figure>
-          <img src="docs/images/correlation_matrix.png" alt="Correlation Matrix" class="chart" onclick="openModal(this.src)">
-          <figcaption>Stock Correlation Matrix</figcaption>
-        </figure>
-        <figure>
-          <img src="docs/images/returns_distribution.png" alt="Returns" class="chart" onclick="openModal(this.src)">
-          <figcaption>Returns Distribution</figcaption>
-        </figure>
-        <figure>
-          <img src="docs/images/weekly_patterns.png" alt="Weekly Patterns" class="chart" onclick="openModal(this.src)">
-          <figcaption>Weekly Stock Patterns</figcaption>
-        </figure>
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+          <span class="card-badge">New</span>
+          <img src="images/returns_distribution.png" alt="Returns Distribution" class="card-image" data-lightbox="charts">
+          <h3 class="card-title">Returns Distribution</h3>
+          <p class="card-description">Visualization of daily returns distribution across selected stocks.</p>
+          <a href="images/returns_distribution.png" data-lightbox="charts" class="btn btn-outline">View Fullscreen</a>
+        </div>
+        
+        <div class="card" data-aos="fade-up" data-aos-delay="200">
+          <img src="images/cumulative_returns.png" alt="Cumulative Returns" class="card-image" data-lightbox="charts">
+          <h3 class="card-title">Cumulative Returns</h3>
+          <p class="card-description">Comparison of cumulative returns over the selected time period.</p>
+          <a href="images/cumulative_returns.png" data-lightbox="charts" class="btn btn-outline">View Fullscreen</a>
+        </div>
+        
+        <div class="card" data-aos="fade-up" data-aos-delay="300">
+          <img src="images/weekly_patterns.png" alt="Weekly Patterns" class="card-image" data-lightbox="charts">
+          <h3 class="card-title">Weekly Patterns</h3>
+          <p class="card-description">Analysis of recurring weekly patterns in stock performance.</p>
+          <a href="images/weekly_patterns.png" data-lightbox="charts" class="btn btn-outline">View Fullscreen</a>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div id="download" class="tab-content">
-      <div class="download-link">
-        <a href="docs/processed_stock_data.csv" download>📥 Download CSV Data</a>
+    <!-- Technical Analysis Section -->
+    <section id="technical" data-aos="fade-up">
+      <h2>📊 Technical Analysis</h2>
+      <p class="section-description">Advanced technical indicators for comprehensive stock analysis.</p>
+      
+      <div class="grid">
+        <div class="card" data-aos="zoom-in">
+          <img src="images/AAPL_technical_analysis.png" alt="AAPL Technical" class="card-image" data-lightbox="technical">
+          <h3 class="card-title">AAPL Technical Analysis</h3>
+          <p class="card-description">Moving averages, MACD, and Bollinger Bands for Apple Inc.</p>
+          <a href="images/AAPL_technical_analysis.png" data-lightbox="technical" class="btn btn-outline">View Fullscreen</a>
+        </div>
+        
+        <div class="card" data-aos="zoom-in" data-aos-delay="100">
+          <img src="images/GOOG_technical_analysis.png" alt="GOOG Technical" class="card-image" data-lightbox="technical">
+          <h3 class="card-title">GOOG Technical Analysis</h3>
+          <p class="card-description">Technical indicators for Alphabet Inc. (Google).</p>
+          <a href="images/GOOG_technical_analysis.png" data-lightbox="technical" class="btn btn-outline">View Fullscreen</a>
+        </div>
+        
+        <div class="card" data-aos="zoom-in" data-aos-delay="200">
+          <img src="images/MSFT_technical_analysis.png" alt="MSFT Technical" class="card-image" data-lightbox="technical">
+          <h3 class="card-title">MSFT Technical Analysis</h3>
+          <p class="card-description">Microsoft Corporation technical indicators and patterns.</p>
+          <a href="images/MSFT_technical_analysis.png" data-lightbox="technical" class="btn btn-outline">View Fullscreen</a>
+        </div>
+        
+        <div class="card" data-aos="zoom-in" data-aos-delay="300">
+          <img src="images/NFLX_technical_analysis.png" alt="NFLX Technical" class="card-image" data-lightbox="technical">
+          <h3 class="card-title">NFLX Technical Analysis</h3>
+          <p class="card-description">Netflix technical indicators and support/resistance levels.</p>
+          <a href="images/NFLX_technical_analysis.png" data-lightbox="technical" class="btn btn-outline">View Fullscreen</a>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- RSI Section -->
+    <section id="rsi" data-aos="fade-up">
+      <h2>📉 RSI & Momentum Indicators</h2>
+      <p class="section-description">Relative Strength Index and other momentum indicators for overbought/oversold analysis.</p>
+      
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3 class="chart-title">Comparative RSI Analysis</h3>
+          <div class="chart-actions">
+            <button class="chart-btn active" onclick="changeRSIPeriod(14)">14-day</button>
+            <button class="chart-btn" onclick="changeRSIPeriod(7)">7-day</button>
+            <button class="chart-btn" onclick="changeRSIPeriod(21)">21-day</button>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="rsiChart"></canvas>
+        </div>
+      </div>
+      
+      <div class="grid">
+        <div class="card" data-aos="flip-left">
+          <img src="images/AAPL_rsi.png" alt="AAPL RSI" class="card-image" data-lightbox="rsi">
+          <h3 class="card-title">AAPL RSI</h3>
+          <p class="card-description">Apple Inc. Relative Strength Index with 14-day period.</p>
+          <a href="images/AAPL_rsi.png" data-lightbox="rsi" class="btn btn-outline">View Fullscreen</a>
+        </div>
+        
+        <div class="card" data-aos="flip-left" data-aos-delay="100">
+          <img src="images/GOOG_rsi.png" alt="GOOG RSI" class="card-image" data-lightbox="rsi">
+          <h3 class="card-title">GOOG RSI</h3>
+          <p class="card-description">Alphabet Inc. RSI with overbought/oversold levels.</p>
+          <a href="images/GOOG_rsi.png" data-lightbox="rsi" class="btn btn-outline">View Fullscreen</a>
+        </div>
+        
+        <div class="card" data-aos="flip-left" data-aos-delay="200">
+          <img src="images/MSFT_rsi.png" alt="MSFT RSI" class="card-image" data-lightbox="rsi">
+          <h3 class="card-title">MSFT RSI</h3>
+          <p class="card-description">Microsoft Corporation momentum analysis.</p>
+          <a href="images/MSFT_rsi.png" data-lightbox="rsi" class="btn btn-outline">View Fullscreen</a>
+        </div>
+        
+        <div class="card" data-aos="flip-left" data-aos-delay="300">
+          <img src="images/NFLX_rsi.png" alt="NFLX RSI" class="card-image" data-lightbox="rsi">
+          <h3 class="card-title">NFLX RSI</h3>
+          <p class="card-description">Netflix RSI with historical comparisons.</p>
+          <a href="images/NFLX_rsi.png" data-lightbox="rsi" class="btn btn-outline">View Fullscreen</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download-section" data-aos="zoom-in">
+      <h2>⬇️ Download Processed Data</h2>
+      <p>Get our comprehensive datasets for your own analysis. Includes historical prices, technical indicators, and calculated metrics.</p>
+      <div class="btn-group">
+        <a href="processed_stock_data.csv" download class="btn btn-primary">
+          <i class="fas fa-file-csv"></i> Download CSV
+        </a>
+        <a href="stock_analysis_report.pdf" download class="btn btn-secondary">
+          <i class="fas fa-file-pdf"></i> Download Report
+        </a>
+      </div>
+    </section>
   </div>
 
-  <!-- Modal for full image -->
-  <div id="imgModal" class="modal" onclick="this.style.display='none'">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="modalImage" />
-  </div>
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>StockVision</h3>
+        <p>Providing professional stock market analysis and visualization tools for investors and traders.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+          <a href="#"><i class="fab fa-github"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Resources</h3>
+        <ul class="footer-links">
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Tutorials</a></li>
+          <li><a href="#">API Access</a></li>
+          <li><a href="#">Market Research</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Contact</h3>
+        <ul class="footer-links">
+          <li><a href="mailto:info@stockvision.com">info@stockvision.com</a></li>
+          <li><a href="tel:+11234567890">+1 (123) 456-7890</a></li>
+          <li><a href="#">Support Center</a></li>
+          <li><a href="#">Feedback</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      &copy; 2025 StockVision. All rights reserved. | Data provided by financial data providers.
+    </div>
+  </footer>
 
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+  
   <script>
-    const toggleDarkMode = () => {
-      document.body.classList.toggle('dark-mode');
-    };
-
-    function showTab(id) {
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      event.target.classList.add('active');
+    // Initialize AOS (Animate On Scroll)
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+    
+    // Tab functionality
+    function openTab(evt, tabName) {
+      const tabContents = document.getElementsByClassName("tab-content");
+      for (let i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove("active");
+      }
+      
+      const tabs = document.getElementsByClassName("tab");
+      for (let i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove("active");
+      }
+      
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
     }
-
-    function openModal(src) {
-      document.getElementById('modalImage').src = src;
-      document.getElementById('imgModal').style.display = "block";
-    }
-
-    document.querySelector('.close').onclick = function () {
-      document.getElementById('imgModal').style.display = "none";
+    
+    // Sample chart data - in a real app, this would come from an API
+    const stockData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      aapl: [142.53, 147.92, 164.90, 173.57, 173.50, 179.21, 196.45, 187.87, 171.96, 170.77, 189.37, 193.58],
+      goog: [98.12, 95.85, 107.95, 111.75, 121.67, 118.15, 132.58, 138.27, 134.18, 125.86, 136.93, 138.85],
+      msft: [239.82, 249.22, 288.50, 304.83, 328.39, 337.09, 366.35, 328.39, 312.01, 338.11, 377.44, 374.51],
+      nflx: [338.10, 366.70, 359.70, 332.80, 389.30, 437.42, 482.53, 446.00, 393.53, 402.66, 486.23, 477.59]
     };
-  </script>
-</body>
-</html>
+    
+    // Create charts
+    document.addEventListener('DOMContentLoaded', function() {
+      // Price Chart
+      const priceCtx = document.getElementById('priceChart').getContext('2d');
+      const priceChart = new Chart(priceCtx, {
+        type: 'line',
+        data: {
+          labels: stockData.labels,
+          datasets: [{
+            label: 'AAPL',
+            data: stockData.aapl,
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+      
+      // Correlation Chart
+      const correlationCtx = document.getElementById('correlationChart').getContext('2d');
+      const correlationChart = new Chart(correlationCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Tech', 'Finance', 'Healthcare', 'Consumer', 'Energy'],
+          datasets: [
+            {
+              label: 'Correlation with S&P 500',
+              data: [0.92, 0.85, 0.78, 0.82, 0.65],
+              backgroundColor: [
+                'rgba(16, 185, 129, 0.7)',
+                'rgba(59, 130, 246, 0.7)',
+                'rgba(245, 158, 11, 0.7)',
+                'rgba(244, 63, 94, 0.7)',
+                'rgba(139, 92, 246, 0.7)'
+              ],
+              borderColor: [
+                'rgba(16, 185, 129, 1)',
+                'rgba(59, 130, 246, 1)',
+                'rgba(245, 158, 11, 1)',
+                'rgba(244, 63, 94, 1)',
+                'rgba(139, 92, 246, 1)'
+              ],
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintain 
