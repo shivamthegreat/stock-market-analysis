@@ -1,229 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Stock Market Analysis Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📊 Stock Market Analysis</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
   <style>
     :root {
-      --bg-color: #f4f6fa;
-      --text-color: #111;
-      --card-bg: #fff;
+      --bg: #f3f4f6;
+      --text: #333;
+      --header-bg: linear-gradient(to right, #1e3c72, #2a5298);
+      --container-bg: #fff;
+      --accent: #4caf50;
     }
-
-    body.dark {
-      --bg-color: #1c1e26;
-      --text-color: #eee;
-      --card-bg: #2b2d3a;
+    [data-theme="dark"] {
+      --bg: #1f1f1f;
+      --text: #f1f1f1;
+      --header-bg: linear-gradient(to right, #0e1326, #1b2838);
+      --container-bg: #2a2a2a;
+      --accent: #7dbb42;
     }
-
+    * { transition: background 0.3s, color 0.3s, transform 0.3s; }
     body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
-      transition: background 0.3s, color 0.3s;
+      color: var(--text);
     }
-
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background: var(--card-bg);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+      background: var(--header-bg);
+      color: white;
+      padding: 50px 20px 30px;
+      text-align: center;
+      position: relative;
     }
-
     header h1 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: 2.5rem;
+      animation: fadeIn 1.2s ease;
     }
-
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin: 1rem 0;
+    header img {
+      max-height: 150px;
+      margin-top: 25px;
+      border-radius: 12px;
+      animation: float 3s ease-in-out infinite;
     }
-
-    .tabs button {
-      padding: 0.7rem 1.2rem;
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--container-bg);
       border: none;
-      background: #007acc;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-
-    .tabs button:hover {
-      background: #005fa3;
-    }
-
-    .toggle {
-      padding: 0.5rem 1rem;
       border-radius: 20px;
-      border: 2px solid #007acc;
-      background: none;
-      color: var(--text-color);
+      padding: 8px;
       cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
-
     .container {
-      padding: 2rem;
+      max-width: 1100px;
+      margin: auto;
+      padding: 40px 20px;
+      background: var(--bg);
     }
-
+    h2 {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 20px;
+      border-left: 5px solid var(--accent);
+      padding-left: 10px;
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+      gap: 25px;
     }
-
-    .card {
-      background: var(--card-bg);
-      padding: 1rem;
+    figure {
+      background: var(--container-bg);
       border-radius: 12px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.07);
-      transition: transform 0.3s ease;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
       cursor: pointer;
+      animation: popIn 0.8s ease;
     }
-
-    .card:hover {
-      transform: translateY(-5px);
+    figure:hover {
+      transform: scale(1.05);
     }
-
-    .card img {
+    figure img {
       width: 100%;
-      border-radius: 10px;
+      border-radius: 8px;
     }
-
-    .card figcaption {
-      text-align: center;
-      margin-top: 0.5rem;
+    figcaption {
+      margin-top: 10px;
       font-weight: 500;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.9);
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal img {
-      max-width: 90%;
-      max-height: 90%;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    footer {
       text-align: center;
-      padding: 2rem;
-      color: gray;
+      color: var(--text);
     }
+    .download-section {
+      text-align: center;
+      margin: 50px 0 30px;
+    }
+    .download-section a {
+      background: var(--accent);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    .download-section a:hover { background: #45a049; }
+    footer { text-align: center; font-size: 0.9em; color: var(--text); margin: 40px 0; }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
 
-    .section {
-      display: none;
-    }
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-    .section.active {
-      display: block;
+    /* Lightbox */
+    .lightbox {
+      position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8);
+      display: flex; justify-content: center; align-items: center; opacity: 0;
+      pointer-events: none; transition: opacity 0.3s;
     }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox img { max-width: 90%; max-height: 90%; border-radius: 8px; }
   </style>
 </head>
-<body>
+<body data-theme="light">
 
   <header>
-    <h1>📊 Stock Market Analysis</h1>
-    <button class="toggle" onclick="toggleTheme()">Dark/Light Mode</button>
+    <button class="theme-toggle"><i class="fas fa-moon"></i></button>
+    <h1>📊 Stock Market Analysis Dashboard</h1>
+    <img src="https://media.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif" alt="Stock GIF">
   </header>
-
-  <div class="tabs">
-    <button onclick="switchTab('charts')">Charts</button>
-    <button onclick="switchTab('data')">Data</button>
-    <button onclick="switchTab('fun')">Fun</button>
-  </div>
 
   <div class="container">
 
-    <!-- Charts Tab -->
-    <section id="charts" class="section active">
-      <div class="grid">
-        <figure class="card" onclick="openModal('docs/images/price_trends.png')">
-          <img src="docs/images/price_trends.png" alt="Price Trends">
-          <figcaption>📈 Price Trends</figcaption>
-        </figure>
+    <h2>📈 Key Metrics & Visualizations</h2>
+    <div class="grid">
+      <figure><img src="images/price_trends.png" alt="Price Trends"><figcaption>Price Trends</figcaption></figure>
+      <!-- additional figures... -->
+    </div>
 
-        <figure class="card" onclick="openModal('docs/images/correlation_matrix.png')">
-          <img src="docs/images/correlation_matrix.png" alt="Correlation Matrix">
-          <figcaption>🔗 Correlation Matrix</figcaption>
-        </figure>
+    <h2>📊 Technical Analysis</h2>
+    <div class="grid">
+      <figure><img src="images/AAPL_technical_analysis.png" alt="AAPL"><figcaption>AAPL Technical</figcaption></figure>
+      <!-- additional figures... -->
+    </div>
 
-        <figure class="card" onclick="openModal('docs/images/returns_distribution.png')">
-          <img src="docs/images/returns_distribution.png" alt="Returns Distribution">
-          <figcaption>💹 Returns Distribution</figcaption>
-        </figure>
+    <h2>📉 RSI Charts</h2>
+    <div class="grid">
+      <figure><img src="images/AAPL_rsi.png" alt="AAPL RSI"><figcaption>AAPL RSI</figcaption></figure>
+      <!-- additional figures... -->
+    </div>
 
-        <!-- Add more charts here if needed -->
-      </div>
-    </section>
+    <div class="download-section">
+      <h2>⬇️ Download Processed Data</h2>
+      <a href="processed_stock_data.csv" download><i class="fas fa-file-csv"></i> Download CSV</a>
+    </div>
 
-    <!-- Data Tab -->
-    <section id="data" class="section">
-      <h2>Download CSV</h2>
-      <p><a href="docs/processed_stock_data.csv" download>📥 Click here to download processed_stock_data.csv</a></p>
-    </section>
-
-    <!-- Fun Tab -->
-    <section id="fun" class="section">
-      <h2>Some Fun to Lighten the Mood</h2>
-      <iframe src="https://giphy.com/embed/l0MYEqEzwMWFCg8rm" width="480" height="270" frameBorder="0" allowFullScreen></iframe>
-    </section>
-
-  </div>
-
-  <!-- Image Modal -->
-  <div class="modal" id="modal" onclick="closeModal()">
-    <img id="modalImage" src="">
   </div>
 
   <footer>
-    © 2025 Shivam's Stock Analysis | Designed with 💼
+    &copy; 2025 Shivam | Project on <a href="https://github.com/shivamthegreat/stock-market-analysis" target="_blank">GitHub</a>
   </footer>
 
+  <!-- Lightbox Overlay -->
+  <div class="lightbox" id="lightbox">
+    <img src="" alt="Enlarged Image">
+  </div>
+
   <script>
-    function toggleTheme() {
-      document.body.classList.toggle('dark');
-    }
+    // Theme Toggle
+    const toggleBtn = document.querySelector('.theme-toggle');
+    const body = document.body;
+    toggleBtn.addEventListener('click', () => {
+      const current = body.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      body.setAttribute('data-theme', next);
+      toggleBtn.innerHTML = next === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    });
 
-    function openModal(src) {
-      document.getElementById('modalImage').src = src;
-      document.getElementById('modal').classList.add('active');
-    }
-
-    function closeModal() {
-      document.getElementById('modal').classList.remove('active');
-    }
-
-    function switchTab(tabId) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-    }
+    // Lightbox Logic
+    const lightbox = document.getElementById('lightbox');
+    const lbImage = lightbox.querySelector('img');
+    document.querySelectorAll('figure img').forEach(img => {
+      img.addEventListener('click', () => {
+        lbImage.src = img.src;
+        lightbox.classList.add('open');
+      });
+    });
+    lightbox.addEventListener('click', () => { lightbox.classList.remove('open'); });
   </script>
-
 </body>
 </html>
