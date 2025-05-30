@@ -56,9 +56,16 @@
       background: var(--container-bg);
       border: none;
       border-radius: 20px;
-      padding: 8px;
+      padding: 8px 12px;
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+    .theme-toggle:hover {
+      transform: rotate(360deg) scale(1.1);
+      transition: transform 0.5s ease;
     }
     .container {
       max-width: 1100px;
@@ -135,7 +142,7 @@
 <body data-theme="light">
 
   <header>
-    <button class="theme-toggle"><i class="fas fa-moon"></i></button>
+    <button class="theme-toggle"><i class="fas fa-moon"></i>&nbsp; Dark/Light Mode</button>
     <h1>📊 Stock Market Analysis Dashboard</h1>
     <img src="https://media.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif" alt="Stock GIF">
   </header>
@@ -145,19 +152,29 @@
     <h2>📈 Key Metrics & Visualizations</h2>
     <div class="grid">
       <figure><img src="images/price_trends.png" alt="Price Trends"><figcaption>Price Trends</figcaption></figure>
-      <!-- additional figures... -->
+      <figure><img src="images/correlation_matrix.png" alt="Correlation"><figcaption>Correlation Matrix</figcaption></figure>
+      <figure><img src="images/average_volume.png" alt="Volume"><figcaption>Average Volume</figcaption></figure>
+      <figure><img src="images/returns_distribution.png" alt="Returns"><figcaption>Returns Distribution</figcaption></figure>
+      <figure><img src="images/rolling_correlation.png" alt="Rolling Correlation"><figcaption>Rolling Correlation</figcaption></figure>
+      <figure><img src="images/normalized_comparison.png" alt="Normalized"><figcaption>Normalized Comparison</figcaption></figure>
+      <figure><img src="images/cumulative_returns.png" alt="Cumulative"><figcaption>Cumulative Returns</figcaption></figure>
+      <figure><img src="images/weekly_patterns.png" alt="Patterns"><figcaption>Weekly Patterns</figcaption></figure>
     </div>
 
     <h2>📊 Technical Analysis</h2>
     <div class="grid">
       <figure><img src="images/AAPL_technical_analysis.png" alt="AAPL"><figcaption>AAPL Technical</figcaption></figure>
-      <!-- additional figures... -->
+      <figure><img src="images/GOOG_technical_analysis.png" alt="GOOG"><figcaption>GOOG Technical</figcaption></figure>
+      <figure><img src="images/MSFT_technical_analysis.png" alt="MSFT"><figcaption>MSFT Technical</figcaption></figure>
+      <figure><img src="images/NFLX_technical_analysis.png" alt="NFLX"><figcaption>NFLX Technical</figcaption></figure>
     </div>
 
     <h2>📉 RSI Charts</h2>
     <div class="grid">
       <figure><img src="images/AAPL_rsi.png" alt="AAPL RSI"><figcaption>AAPL RSI</figcaption></figure>
-      <!-- additional figures... -->
+      <figure><img src="images/GOOG_rsi.png" alt="GOOG RSI"><figcaption>GOOG RSI</figcaption></figure>
+      <figure><img src="images/MSFT_rsi.png" alt="MSFT RSI"><figcaption>MSFT RSI</figcaption></figure>
+      <figure><img src="images/NFLX_rsi.png" alt="NFLX RSI"><figcaption>NFLX RSI</figcaption></figure>
     </div>
 
     <div class="download-section">
@@ -184,7 +201,7 @@
       const current = body.getAttribute('data-theme');
       const next = current === 'light' ? 'dark' : 'light';
       body.setAttribute('data-theme', next);
-      toggleBtn.innerHTML = next === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+      toggleBtn.innerHTML = next === 'light' ? '<i class="fas fa-moon"></i>&nbsp; Dark/Light Mode' : '<i class="fas fa-sun"></i>&nbsp; Dark/Light Mode';
     });
 
     // Lightbox Logic
