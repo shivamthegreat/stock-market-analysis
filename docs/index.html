@@ -2,187 +2,239 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stock Market Analysis</title>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --bg-color: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      --text-color: #fff;
-      --card-bg: rgba(255, 255, 255, 0.05);
-    }
-    
-    [data-theme='light'] {
-      --bg-color: #f9f9f9;
-      --text-color: #111;
-      --card-bg: #fff;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
-      padding: 40px 20px;
-      max-width: 1200px;
-      margin: auto;
-      transition: all 0.4s ease;
+      margin: 0;
+      background-color: #f5f7fa;
+      color: #1e1e2f;
+      transition: background 0.3s, color 0.3s;
     }
 
-    h1 {
+    .dark-mode {
+      background-color: #1e1e2f;
+      color: #f5f7fa;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2a2f4f, #6c5ce7);
+      color: white;
+      padding: 2rem;
       text-align: center;
-      margin-bottom: 20px;
-      font-size: 3rem;
     }
 
-    .logo {
-      display: block;
-      margin: 20px auto;
-      width: 120px;
-      border-radius: 50%;
+    header img {
+      height: 50px;
+      vertical-align: middle;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
 
     .tabs {
       display: flex;
       justify-content: center;
-      margin-top: 30px;
+      margin-bottom: 2rem;
+      gap: 20px;
     }
 
     .tab {
-      background: #444;
-      color: white;
-      border: none;
-      padding: 10px 20px;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      border: 2px solid #6c5ce7;
+      background-color: transparent;
+      color: #6c5ce7;
+      font-weight: bold;
       cursor: pointer;
-      margin: 0 5px;
-      border-radius: 8px;
-      font-size: 1rem;
+      transition: 0.3s;
     }
 
-    .tab.active {
-      background: #00c6ff;
+    .tab:hover, .tab.active {
+      background-color: #6c5ce7;
+      color: white;
     }
 
     .tab-content {
       display: none;
-      margin-top: 30px;
-      animation: fadeIn 0.6s;
+      animation: fadeIn 0.5s ease-in-out;
     }
 
     .tab-content.active {
       display: block;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
     }
 
     figure {
-      background: var(--card-bg);
+      margin: 0;
+      border: 1px solid #ccc;
       border-radius: 12px;
-      padding: 12px;
-      text-align: center;
-      cursor: pointer;
       overflow: hidden;
+      background-color: white;
+      transition: transform 0.3s;
     }
 
-    figure img {
-      width: 100%;
-      border-radius: 8px;
+    .dark-mode figure {
+      background-color: #2a2a3a;
+    }
+
+    figure:hover {
+      transform: scale(1.02);
     }
 
     figcaption {
-      margin-top: 10px;
+      padding: 0.75rem;
+      text-align: center;
       font-weight: 600;
     }
 
-    .btn-download {
-      display: inline-block;
-      margin: 40px auto;
-      background: linear-gradient(to right, #0072ff, #00c6ff);
-      color: white;
-      padding: 14px 30px;
-      border: none;
-      border-radius: 30px;
-      text-decoration: none;
-      font-size: 1rem;
+    img.chart {
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+    }
+
+    .download-link {
       text-align: center;
-      transition: background 0.3s;
+      margin-top: 2rem;
     }
 
-    .btn-download:hover {
-      background: linear-gradient(to right, #00c6ff, #0072ff);
+    .download-link a {
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      background-color: #6c5ce7;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
     }
 
-    .switch-theme {
-      position: absolute;
+    .toggle-dark {
+      position: fixed;
       top: 20px;
       right: 20px;
-      background: #ccc;
-      padding: 10px 15px;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      background: #6c5ce7;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
       cursor: pointer;
-      font-weight: 600;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 99;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background: rgba(0, 0, 0, 0.85);
+    }
+
+    .modal-content {
+      margin: 5% auto;
+      display: block;
+      max-width: 90%;
+      border-radius: 10px;
+    }
+
+    .close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-
 <body>
-  <div class="switch-theme" onclick="toggleTheme()">Toggle Theme</div>
-  <h1>📈 Stock Market Analysis Report</h1>
-  <img src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif" alt="Finance GIF" class="logo" />
+  <button class="toggle-dark" onclick="toggleDarkMode()">🌙 Dark Mode / ☀️ Light Mode</button>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab active" onclick="openTab('visuals')">Visualizations</button>
-    <button class="tab" onclick="openTab('data')">Download Data</button>
-  </div>
+  <header>
+    <h1>📈 Stock Market Analysis Report</h1>
+    <p>Visualized Insights & Downloadable Data</p>
+  </header>
 
-  <!-- Tab Content -->
-  <div id="visuals" class="tab-content active">
-    <div class="grid">
-      <figure><img src="docs/images/price_trends.png"><figcaption>Price Trends</figcaption></figure>
-      <figure><img src="docs/images/correlation_matrix.png"><figcaption>Correlation Matrix</figcaption></figure>
-      <figure><img src="docs/images/average_volume.png"><figcaption>Average Volume</figcaption></figure>
-      <figure><img src="docs/images/returns_distribution.png"><figcaption>Returns Distribution</figcaption></figure>
-      <figure><img src="docs/images/price_distribution.png"><figcaption>Price Distribution</figcaption></figure>
-      <figure><img src="docs/images/cumulative_returns.png"><figcaption>Cumulative Returns</figcaption></figure>
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('charts')">📊 Visualizations</div>
+      <div class="tab" onclick="showTab('download')">⬇️ Download Data</div>
+    </div>
+
+    <div id="charts" class="tab-content active">
+      <div class="grid">
+        <figure>
+          <img src="docs/images/price_trends.png" alt="Price Trends" class="chart" onclick="openModal(this.src)">
+          <figcaption>Price Trends</figcaption>
+        </figure>
+        <figure>
+          <img src="docs/images/correlation_matrix.png" alt="Correlation Matrix" class="chart" onclick="openModal(this.src)">
+          <figcaption>Stock Correlation Matrix</figcaption>
+        </figure>
+        <figure>
+          <img src="docs/images/returns_distribution.png" alt="Returns" class="chart" onclick="openModal(this.src)">
+          <figcaption>Returns Distribution</figcaption>
+        </figure>
+        <figure>
+          <img src="docs/images/weekly_patterns.png" alt="Weekly Patterns" class="chart" onclick="openModal(this.src)">
+          <figcaption>Weekly Stock Patterns</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div id="download" class="tab-content">
+      <div class="download-link">
+        <a href="docs/processed_stock_data.csv" download>📥 Download CSV Data</a>
+      </div>
     </div>
   </div>
 
-  <div id="data" class="tab-content">
-    <p style="text-align: center; margin-top: 40px;">
-      <a href="docs/processed_stock_data.csv" class="btn-download">⬇️ Download Processed CSV Data</a>
-    </p>
+  <!-- Modal for full image -->
+  <div id="imgModal" class="modal" onclick="this.style.display='none'">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage" />
   </div>
 
   <script>
-    function openTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+    const toggleDarkMode = () => {
+      document.body.classList.toggle('dark-mode');
+    };
+
+    function showTab(id) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
+      document.getElementById(id).classList.add('active');
       event.target.classList.add('active');
     }
 
-    function toggleTheme() {
-      const body = document.body;
-      body.dataset.theme = body.dataset.theme === 'light' ? '' : 'light';
+    function openModal(src) {
+      document.getElementById('modalImage').src = src;
+      document.getElementById('imgModal').style.display = "block";
     }
+
+    document.querySelector('.close').onclick = function () {
+      document.getElementById('imgModal').style.display = "none";
+    };
   </script>
 </body>
 </html>
