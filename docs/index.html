@@ -1,70 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📊 Stock Market Analysis</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stock Market Analysis</title>
 
-  <!-- Fonts & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --bg-color: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      --text-color: #fff;
+      --card-bg: rgba(255, 255, 255, 0.05);
+    }
+    
+    [data-theme='light'] {
+      --bg-color: #f9f9f9;
+      --text-color: #111;
+      --card-bg: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
-      background: #f3f4f6;
-      margin: 0;
-      color: #333;
-    }
-
-    header {
-      background: linear-gradient(to right, #1e3c72, #2a5298);
-      color: white;
-      padding: 50px 20px 30px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-
-    header img {
-      max-height: 150px;
-      margin-top: 25px;
-      border-radius: 12px;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: auto;
+      background: var(--bg-color);
+      color: var(--text-color);
       padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      transition: all 0.4s ease;
     }
 
-    h2 {
-      font-weight: 700;
-      color: #1e3c72;
+    h1 {
+      text-align: center;
       margin-bottom: 20px;
-      border-left: 5px solid #4caf50;
-      padding-left: 10px;
+      font-size: 3rem;
+    }
+
+    .logo {
+      display: block;
+      margin: 20px auto;
+      width: 120px;
+      border-radius: 50%;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .tab {
+      background: #444;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin: 0 5px;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .tab.active {
+      background: #00c6ff;
+    }
+
+    .tab-content {
+      display: none;
+      margin-top: 30px;
+      animation: fadeIn 0.6s;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 25px;
     }
 
     figure {
-      background: white;
+      background: var(--card-bg);
       border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s ease;
-    }
-
-    figure:hover {
-      transform: scale(1.03);
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      overflow: hidden;
     }
 
     figure img {
@@ -74,94 +108,81 @@
 
     figcaption {
       margin-top: 10px;
-      font-weight: 500;
-      text-align: center;
-      color: #444;
+      font-weight: 600;
     }
 
-    .download-section {
-      text-align: center;
-      margin: 50px 0 30px;
-    }
-
-    .download-section a {
-      background: #4caf50;
+    .btn-download {
+      display: inline-block;
+      margin: 40px auto;
+      background: linear-gradient(to right, #0072ff, #00c6ff);
       color: white;
-      padding: 14px 28px;
-      border-radius: 6px;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 30px;
       text-decoration: none;
       font-size: 1rem;
+      text-align: center;
       transition: background 0.3s;
     }
 
-    .download-section a:hover {
-      background: #45a049;
+    .btn-download:hover {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
     }
 
-    footer {
-      text-align: center;
-      font-size: 0.9em;
-      color: #777;
-      margin: 40px 0;
-    }
-
-    footer a {
-      color: #2a5298;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
+    .switch-theme {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ccc;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
     }
   </style>
 </head>
+
 <body>
+  <div class="switch-theme" onclick="toggleTheme()">Toggle Theme</div>
+  <h1>📈 Stock Market Analysis Report</h1>
+  <img src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif" alt="Finance GIF" class="logo" />
 
-  <header>
-    <h1>📊 Stock Market Analysis Dashboard</h1>
-    <img src="https://media.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif" alt="Stock GIF">
-  </header>
-
-  <div class="container">
-
-    <h2>📈 Key Metrics & Visualizations</h2>
-    <div class="grid">
-      <figure><img src="images/price_trends.png" alt="Price Trends"><figcaption>Price Trends</figcaption></figure>
-      <figure><img src="images/correlation_matrix.png" alt="Correlation"><figcaption>Correlation Matrix</figcaption></figure>
-      <figure><img src="images/average_volume.png" alt="Volume"><figcaption>Average Volume</figcaption></figure>
-      <figure><img src="images/returns_distribution.png" alt="Returns"><figcaption>Returns Distribution</figcaption></figure>
-      <figure><img src="images/rolling_correlation.png" alt="Rolling Correlation"><figcaption>Rolling Correlation</figcaption></figure>
-      <figure><img src="images/normalized_comparison.png" alt="Normalized"><figcaption>Normalized Comparison</figcaption></figure>
-      <figure><img src="images/cumulative_returns.png" alt="Cumulative"><figcaption>Cumulative Returns</figcaption></figure>
-      <figure><img src="images/weekly_patterns.png" alt="Patterns"><figcaption>Weekly Patterns</figcaption></figure>
-    </div>
-
-    <h2>📊 Technical Analysis</h2>
-    <div class="grid">
-      <figure><img src="images/AAPL_technical_analysis.png" alt="AAPL"><figcaption>AAPL Technical</figcaption></figure>
-      <figure><img src="images/GOOG_technical_analysis.png" alt="GOOG"><figcaption>GOOG Technical</figcaption></figure>
-      <figure><img src="images/MSFT_technical_analysis.png" alt="MSFT"><figcaption>MSFT Technical</figcaption></figure>
-      <figure><img src="images/NFLX_technical_analysis.png" alt="NFLX"><figcaption>NFLX Technical</figcaption></figure>
-    </div>
-
-    <h2>📉 RSI Charts</h2>
-    <div class="grid">
-      <figure><img src="images/AAPL_rsi.png" alt="AAPL RSI"><figcaption>AAPL RSI</figcaption></figure>
-      <figure><img src="images/GOOG_rsi.png" alt="GOOG RSI"><figcaption>GOOG RSI</figcaption></figure>
-      <figure><img src="images/MSFT_rsi.png" alt="MSFT RSI"><figcaption>MSFT RSI</figcaption></figure>
-      <figure><img src="images/NFLX_rsi.png" alt="NFLX RSI"><figcaption>NFLX RSI</figcaption></figure>
-    </div>
-
-    <div class="download-section">
-      <h2>⬇️ Download Processed Data</h2>
-      <a href="processed_stock_data.csv" download><i class="fas fa-file-csv"></i> Download CSV</a>
-    </div>
-
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="openTab('visuals')">Visualizations</button>
+    <button class="tab" onclick="openTab('data')">Download Data</button>
   </div>
 
-  <footer>
-    &copy; 2025 Shivam | Project on <a href="https://github.com/shivamthegreat/stock-market-analysis" target="_blank">GitHub</a>
-  </footer>
+  <!-- Tab Content -->
+  <div id="visuals" class="tab-content active">
+    <div class="grid">
+      <figure><img src="docs/images/price_trends.png"><figcaption>Price Trends</figcaption></figure>
+      <figure><img src="docs/images/correlation_matrix.png"><figcaption>Correlation Matrix</figcaption></figure>
+      <figure><img src="docs/images/average_volume.png"><figcaption>Average Volume</figcaption></figure>
+      <figure><img src="docs/images/returns_distribution.png"><figcaption>Returns Distribution</figcaption></figure>
+      <figure><img src="docs/images/price_distribution.png"><figcaption>Price Distribution</figcaption></figure>
+      <figure><img src="docs/images/cumulative_returns.png"><figcaption>Cumulative Returns</figcaption></figure>
+    </div>
+  </div>
 
+  <div id="data" class="tab-content">
+    <p style="text-align: center; margin-top: 40px;">
+      <a href="docs/processed_stock_data.csv" class="btn-download">⬇️ Download Processed CSV Data</a>
+    </p>
+  </div>
+
+  <script>
+    function openTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function toggleTheme() {
+      const body = document.body;
+      body.dataset.theme = body.dataset.theme === 'light' ? '' : 'light';
+    }
+  </script>
 </body>
 </html>
