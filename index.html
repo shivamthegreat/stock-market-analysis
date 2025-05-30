@@ -1,29 +1,165 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Stock Analysis Report</title>
-    <style>
-        body { font-family: Arial; max-width: 800px; margin: auto; }
-        img { max-width: 100%; border: 1px solid #ddd; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📈 Stock Market Analysis Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f9;
+      color: #333;
+    }
+
+    header {
+      text-align: center;
+      background: linear-gradient(to right, #1f4037, #99f2c8);
+      padding: 40px 20px;
+      color: white;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      font-weight: 800;
+    }
+
+    header img {
+      max-height: 150px;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    h2 {
+      font-weight: 600;
+      margin-top: 40px;
+      color: #1a1a1a;
+      border-left: 5px solid #4CAF50;
+      padding-left: 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    figure {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+
+    figure:hover {
+      transform: scale(1.03);
+    }
+
+    figure img {
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    figcaption {
+      text-align: center;
+      font-size: 1em;
+      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    .download-section {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .download-section a {
+      text-decoration: none;
+      color: white;
+      background-color: #4CAF50;
+      padding: 12px 25px;
+      font-size: 1em;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s;
+    }
+
+    .download-section a:hover {
+      background-color: #45a049;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9em;
+      color: #666;
+      padding: 20px 0;
+      margin-top: 50px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Stock Market Analysis Report</h1>
-    
-    <!-- Key Visualizations -->
+
+  <header>
+    <h1>📊 Stock Market Analysis Report</h1>
+    <img src="https://media.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif" alt="Stock Animation">
+  </header>
+
+  <div class="container">
+    <h2>📌 Key Visualizations</h2>
     <div class="grid">
-        <figure>
-            <img src="images/price_trends.png" alt="Price Trends">
-            <figcaption>Price Trends</figcaption>
-        </figure>
-        <figure>
-            <img src="images/correlation_matrix.png" alt="Correlations">
-            <figcaption>Stock Correlations</figcaption>
-        </figure>
+      <figure>
+        <img src="images/price_trends.png" alt="Price Trends">
+        <figcaption>Price Trends of Stocks</figcaption>
+      </figure>
+      <figure>
+        <img src="images/correlation_matrix.png" alt="Correlation Matrix">
+        <figcaption>Correlation Between Stocks</figcaption>
+      </figure>
+      <figure>
+        <img src="images/average_volume.png" alt="Average Volume">
+        <figcaption>Average Volume per Stock</figcaption>
+      </figure>
+      <figure>
+        <img src="images/returns_distribution.png" alt="Returns Distribution">
+        <figcaption>Distribution of Stock Returns</figcaption>
+      </figure>
+      <figure>
+        <img src="images/rolling_correlation.png" alt="Rolling Correlation">
+        <figcaption>Rolling Correlation Trends</figcaption>
+      </figure>
+      <figure>
+        <img src="images/normalized_comparison.png" alt="Normalized Comparison">
+        <figcaption>Normalized Stock Price Comparison</figcaption>
+      </figure>
     </div>
 
-    <!-- Link to Data -->
-    <p>Download processed data: <a href="data/processed_stock_data.csv">CSV</a></p>
+    <div class="download-section">
+      <h2>⬇️ Download Processed Data</h2>
+      <a href="data/processed_stock_data.csv" download>
+        <i class="fas fa-file-csv"></i> Download CSV File
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Shivam | Stock Market Dashboard | GitHub: <a href="https://github.com/shivamthegreat/stock-market-analysis" target="_blank">View Project</a>
+  </footer>
+
 </body>
 </html>
