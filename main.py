@@ -1,7 +1,7 @@
 # Stock Market Analysis Project - Enhanced
 # Tools: Python, Pandas, Matplotlib, Seaborn
-# Author: [Your Name]
-# Date: [Current Date]
+# Author: Shivam
+# Date: 12/05/2025
 
 import pandas as pd
 import numpy as np
